@@ -13,7 +13,7 @@ corrMatOrder <- function(data, order=c("ANOVA", "AOE", "FPC", "hclust", "alphabe
 			if(names(data)[i] != groupCol){
 			fm = as.formula(paste(names(data)[i],"~",groupCol))
 			sum_aov = summary(aov(formula = fm, data = data))
-			ord = append(ord,sum_aov[[1]]$F[1])
+			ord = append(ord,sum_aov[[1]]$"F\ value"[1])
 			
 			}
 		}
@@ -71,37 +71,78 @@ corrMatOrder <- function(data, order=c("ANOVA", "AOE", "FPC", "hclust", "alphabe
 
 
 
-visovaParallelCord <- function(data, groupCol, order=c("ANOVA","AOE", "FPC", "hclust", "alphabetic","original"),hclust.method = c("complete", "ward", "single", "average","mcquitty", "median", "centroid"))
+visovaParallelCord <- function(data, groupCol, order=c("ANOVA","AOE", "FPC", "hclust", "alphabetic","original"),hclust.method = c("complete", "ward", "single", "average","mcquitty", "median", "centroid"), colors = c("turquoise","red","lime","purple","orange","blue","yellow","magenta","gray","olive","green","teal","navy"))
 {##, editor
 
+
 #Correlation heuristic for column ordering
- 
   col_ordering = corrMatOrder(data,order,hclust.method, groupCol) 
   if (order == "hclust"){n_order = paste("(",order, "-",hclust.method,")") }else{ n_order =paste("(",order,")")}
-	data <- data[complete.cases(data),]
+	
+    data <- data[complete.cases(data),]
 	gr_index = which(colnames(data)==groupCol) 
   	g_c <- subset( data, select = gr_index )
  	data <- subset( data, select = -gr_index ) 
 	data <- subset(data, select=col_ordering)
 
   	data[, (dim(data)[2]+1)] <- g_c
+
 	groups = subset(data, select=groupCol)
  	group_types = table(groups)
-	for(i in 1:length(names(group_types))){
- 		cat(paste("\nGroup-",i,":",names(group_types)[i],"\n"))
-	}
-	data2 = data.matrix(data)
+    group_names = names(group_types)
+
+    
+    #COLOR SELECTION CHECKING
+    
+    maincolors= c("turquoise","red","lime","purple","orange","blue","yellow","magenta","gray","olive","green","teal","navy")
+
+    inside = FALSE
+    inside2 = FALSE
+    
+    if(identical(maincolors,colors)){
+        paste(cat("\nNO Color Selection Detected...\n"))
+        paste(cat("DEFAULT Color Order:", maincolors,"\n"))
+        inside2 = TRUE
+    }
+    
+    if( length(colors) < length(group_names) ){
+        
+        paste(cat("\nMISSING Color Selection...\n"))
+        paste(cat("DEFAULT Color Order:", maincolors,"\n"))
+    }
+    
+    if( length(colors) >= length(group_names) ){
+    
+    for(i in 1:length(colors)){
+    
+        if(!is.element(colors[i], maincolors)){
+           paste(cat("\nINVALID Color Selection...\n"))
+           paste(cat("DEFAULT Color Order:", maincolors,"\n"))
+           colors = maincolors
+           inside = TRUE
+           }
+    }
+    
+        if(!inside && !inside2){
+            paste(cat("\nColor Selection Detected...\n"))
+            paste(cat("Color Order:", colors,"\n"))
+
+        }
+    
+    }
+    
+
+    
+    data2 = data.matrix(data)
 	data = data.frame(data2) 
 
 
 #Calculating group averages and appending them into the data as rows   
   groups = subset(data, select=groupCol)
   group_types = unique(groups)
-  
 
   group_types = sort(as.vector(as.matrix(group_types)))
   groups = as.vector(as.matrix(groups))
-	
   for (i in 1:length(group_types)){
 
 	temp = subset(data, data[,groupCol] == group_types[i])
@@ -120,11 +161,11 @@ visovaParallelCord <- function(data, groupCol, order=c("ANOVA","AOE", "FPC", "hc
   yvar = ""
   options = ""
   chartid = "visovaParallelCoordinates"
-  visovaCoreChart(data, groups, groupCol, n_order, xvar, yvar, options, chartid, chart.type="parallelC")
+  visovaCoreChart(data, groups, group_names, colors, groupCol, n_order, xvar, yvar, options, chartid, chart.type="parallelC")
 }
 
 
-visovaCoreChart <- function(data, groups, groupCol, n_order,  xvar="", yvar="", options=list(), chartid, chart.type){
+visovaCoreChart <- function(data, groups, group_names, colors, groupCol, n_order,  xvar="", yvar="", options=list(), chartid, chart.type){
   
   dataName <- deparse(substitute(data))
   
@@ -137,7 +178,7 @@ visovaCoreChart <- function(data, groups, groupCol, n_order,  xvar="", yvar="", 
   checked.data <- visovaCheckCoreChartData(data)
 
   
-  output <- visovaChart(type=chart.type, checked.data=checked.data, groups, groupCol, n_order, options=my.options, chartid=chartid, package="corechart")
+  output <- visovaChart(type=chart.type, checked.data=checked.data, groups, group_names, colors, groupCol, n_order, options=my.options, chartid=chartid, package="corechart")
   
   return(output)
 }

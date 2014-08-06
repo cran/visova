@@ -8,14 +8,14 @@
   Plot of VISOVA.
 }
 \usage{
-visovaParallelCord(data, groupCol, order, hclust.method)
+visovaParallelCord(data, groupCol, order, hclust.method, colors)
 }
 
 \arguments{
   \item{data}{a \code{\link{data.frame}} to be displayed as a parallel coordinates plot
   }
   \item{groupCol}{
-    name of the column which contains the category levels of data
+Character, the name of the column which contains the category levels of data
   }
  \item{order}{
 Character, the ordering method of the columns/variables in the parallel coordinates plot..
@@ -25,20 +25,53 @@ Character, the ordering method of the columns/variables in the parallel coordina
                 \item \code{"AOE"} for the angular order of the eigenvectors.
                 \item \code{"FPC"} for the first principal component order.
                 \item \code{"hclust"} for the hierarchical clustering order.
-                \item \code{"alphabet"} for alphabetical order.
+                \item \code{"alphabetic"} for alphabetical order.
+                
 		Look at the reference paper for further details.
         }
 
 }
 
   \item{hclust.method}{
-Character, the agglomeration method to be used when \code{order} is \code{\link{hclust}}. This should be one of \code{"ward"}, \code{"single"}, \code{"complete"}, \code{"average"}, \code{"mcquitty"}, \code{"median"} or \code{"centroid"}.
+Character, the agglomeration method to be used when \code{order} is \code{hclust}. This should be one of the
 
-Look at the reference paper for further details.
+  \itemize{
+                \item \code{"ward"} for the Ward's Hierarchical Linkage Method .
+                \item \code{"single"} for the Single Hierarchical Linkage Method.
+                \item \code{"complete"} for the Complete Hierarchical Linkage Method.
+                \item \code{"average"} for the Average Hierarchical Linkage Method.
+                \item \code{"mcquitty"} for the Mcquitty's Hierarchical Linkage Method.
+                \item \code{"median"} for the Median Hierarchical Linkage Method
+                \item \code{"centroid"} for the Centroid Hierarchical Linkage Method.
+
+        Look at the reference paper for further details.
 }
+}
+ \item{colors}{
+Character vector, the individual group colors may be specified by using this field. Otherwise default colors are used. The name of the colors that are indicated in this field should not less than the number of groups. Below colors must be used:
+
+    \itemize{
+                \item \code{"turquoise"}: rgb(0,206,209)
+                \item \code{"red"}: rgb(255,0,0)
+                \item \code{"lime"}: rgb(0,255,0)
+                \item \code{"purple"}: rgb(128,0,128)
+                \item \code{"orange"}: rgb(255,140,0)
+                \item \code{"blue"}: rgb(0,0,255)
+                \item \code{"yellow"}: rgb(255,255,0)
+                \item \code{"magenta"}: rgb(255,0,255)
+                \item \code{"gray"}: rgb(128,128,128)
+                \item \code{"olive"}: rgb(128,128,0))
+                \item \code{"green"}: rgb(0,128,0)
+                \item \code{"teal"}: rgb(0,128,128)
+                \item \code{"navy"}: rgb(0,0,128)
+
+    }
+}
+
+
 }
 \references{
-VISOVA: an integration of Visualization and ANOVA, The UCLA VISOVA Elite(2014)
+VISOVA: an integration of Visualization and ANOVA; A.V. Barbaros, D.S. Parker; The UCLA VISOVA Elite(2014)
 }
 \author{
   Ali Vala Barbaros \email{alivalabarbaros@gmail.com}
@@ -48,30 +81,33 @@ VISOVA: an integration of Visualization and ANOVA, The UCLA VISOVA Elite(2014)
   Data frame should not include any character values other than group column which has to be indicated when this function is called.
 }
 \examples{
-plot(visovaParallelCord(auto[,2:14],"Origin",order="AOE"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="ANOVA"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="original"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="FPC"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="alphabetic"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="complete"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="average"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="median"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="ward"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="single"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="mcquitty"))
-plot(visovaParallelCord(auto[,2:14],"Origin",order="hclust", hclust.method="centroid"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="original"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="ANOVA"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="AOE"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="FPC"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="alphabetic"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="complete"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="average"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="median"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="ward"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="single"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="mcquitty"))
-plot(visovaParallelCord(ReactionTime[,2:14],"Group",order="hclust", hclust.method="centroid"))
+
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="complete"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="average"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="median"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="ward"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="single"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="mcquitty"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],
+"AGE_GENDER_GroupName",order="hclust", hclust.method="centroid"))
+
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],"AGE_GENDER_GroupName",order="alphabetic"))
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],"AGE_GENDER_GroupName",order="AOE"))
+plot(visovaParallelCord(LA2K_ReactionTime[,c(2:13, 27)],"AGE_GENDER_GroupName",order="ANOVA"))
+
 
 }
 \keyword{ visova }
