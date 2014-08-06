@@ -1,0 +1,11 @@
+036a8f1f49ec5a9ddbe7203f350e1347 *DESCRIPTION
+79bf1dca4455272557ae488c9cc6e125 *NAMESPACE
+b75ff6826ca903a2af140dab2c8bb4ab *R/visova.R
+0e863a9af97d40113d6870c1dd87560d *R/visovaCoreCharts.R
+8dee7ca2a9396cfff2962f6da93cc11b *R/visovaMethods.R
+d8a4aff838bdebf4c71d5ed845cd78c0 *R/zzz.R
+3e4e2aec2b91280c841fa17fa8dfa3b5 *data/ReactionTime.rda
+0c3e2bcfb653aa0723e1788db997b32f *data/auto.rda
+f3aac18d0a3c77c383f6814ab62181a8 *man/ReactionTime.Rd
+e9bec485476d013cabc331962b1a681e *man/auto.Rd
+2c6c7cc2e1c2759b33b42577af11c09c *man/visovaParallelCord.Rd

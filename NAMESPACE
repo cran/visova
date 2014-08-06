@@ -1,0 +1,13 @@
+importFrom(methods, setMethod)		 
+importFrom(utils, packageDescription)
+importFrom(tools, startDynamicHelp) 		   	 
+importFrom("RJSONIO", "toJSON")
+		 	 
+export(visovaParallelCord)		  		 
+			 
+#Methods		 
+S3method(plot, visova)		 
+S3method(print, visova)
+
+
+
